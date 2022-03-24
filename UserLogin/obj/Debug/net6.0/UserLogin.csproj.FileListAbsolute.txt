@@ -1,0 +1,12 @@
+C:\Users\User\Desktop\PS_31_Yasna\UserLogin\bin\Debug\net6.0\UserLogin.deps.json
+C:\Users\User\Desktop\PS_31_Yasna\UserLogin\bin\Debug\net6.0\UserLogin.dll
+C:\Users\User\Desktop\PS_31_Yasna\UserLogin\bin\Debug\net6.0\UserLogin.pdb
+C:\Users\User\Desktop\PS_31_Yasna\UserLogin\obj\Debug\net6.0\UserLogin.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\PS_31_Yasna\UserLogin\obj\Debug\net6.0\UserLogin.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\User\Desktop\PS_31_Yasna\UserLogin\obj\Debug\net6.0\UserLogin.AssemblyInfoInputs.cache
+C:\Users\User\Desktop\PS_31_Yasna\UserLogin\obj\Debug\net6.0\UserLogin.AssemblyInfo.cs
+C:\Users\User\Desktop\PS_31_Yasna\UserLogin\obj\Debug\net6.0\UserLogin.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\PS_31_Yasna\UserLogin\obj\Debug\net6.0\UserLogin.dll
+C:\Users\User\Desktop\PS_31_Yasna\UserLogin\obj\Debug\net6.0\refint\UserLogin.dll
+C:\Users\User\Desktop\PS_31_Yasna\UserLogin\obj\Debug\net6.0\UserLogin.pdb
+C:\Users\User\Desktop\PS_31_Yasna\UserLogin\obj\Debug\net6.0\ref\UserLogin.dll
