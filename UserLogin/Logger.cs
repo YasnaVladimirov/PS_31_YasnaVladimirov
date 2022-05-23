@@ -1,110 +1,67 @@
 ﻿using System;
+using System.IO;
+using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace UserLogin
 {
-    internal class Logger
+    static public class Logger
     {
-		static private List<string> currentSessionActivities = new List<string>();
+        static private List<string> currentSessionActivities = new List<string>();
 
-		public Logger()
-		{
+        static public IEnumerable<string> GetCurrentSessionActivities(string filter)
+        {
+            List<string> filteredActivities = (from activity in currentSessionActivities
+                                               where activity.Contains(filter)
+                                               select activity).ToList();
+            return filteredActivities;
+        }
 
-		}
+        static public void LogActivity(string activity)
+        {
+            string activityLine = "INFO "
+                + DateTime.Now + " "
+                + LoginValidation.currentUserName + " "
+                + LoginValidation.currentUserRole + " "
+                + activity;
+            currentSessionActivities.Add(activityLine);
+            WriteLogInFile(activityLine);
+        }
 
-		static public void LogActivity(string activity)
-		{
-			string activityLine = DateTime.Now + ";"
-				+ LoginValidation.name + ";"
-				+ LoginValidation.getRole() + ";"
-				+ activity;
+        static public void LogError(string errorMessage)
+        {
+            string errorMessageLine = "ERROR "
+                + DateTime.Now + " "
+                + LoginValidation.currentUserName + " "
+                + LoginValidation.currentUserRole + " "
+                + errorMessage;
+            currentSessionActivities.Add(errorMessage);
+            WriteLogInFile(errorMessage);
+            Console.WriteLine(errorMessage);
+        }
 
-			if (File.Exists("test.txt"))
-			{
-				Thread.Sleep(1000);
-				File.AppendAllText("test.txt", activityLine);
-			}
-			currentSessionActivities.Add(activityLine);
-		}
+        static private void WriteLogInFile(string activity)
+        {
+            if (File.Exists("test.txt") == true)
+            {
+                File.AppendAllText("test.txt", activity + "\n");
+            }
+        }
 
-		static public void VisualizeLogs(string message)
-		{
-			string errorLine = DateTime.Now + "," + "Error logging in, " + message + "\r\n";
-			if (!File.Exists("error.txt"))
-			{
-				FileStream file = File.Create("error.txt");
-				StreamWriter writer = new StreamWriter(file);
-				writer.WriteLine(message);
-				writer.Close();
-				file.Close();
-			}
-			else
-			{
-				File.AppendAllText("error.txt", errorLine);
-			}
-		}
-
-		static public IEnumerable<string> GetAllLinesFromFile()
-		{
-			List<string> lines = new List<string>();
-			StreamReader reader = new StreamReader("test.txt");
-			while (reader.Peek() >= 0)
-			{
-				lines.Add(reader.ReadLine());
-			}
-			reader.Close();
-			return lines;
-		}
-
-		static public void VisualizeLogs()
-		{
-			IEnumerable<string> lines = GetAllLinesFromFile();
-			foreach (string line in lines)
-			{
-				Console.WriteLine(line);
-			}
-		}
-
-		public static IEnumerable<string> GetCurrentSessionActivities(String filter)
-		{
-			IEnumerable<string> activityList = (from activity in currentSessionActivities where activity.Contains(filter) select activity).ToList();
-			return activityList;
-		}
-
-		static public void VisualizeCurrentLogs(string filter)
-		{
-			StringBuilder strBuilder = new StringBuilder();
-			IEnumerable<string> currentLogs = GetCurrentSessionActivities(filter);
-			foreach (string line in currentLogs)
-			{
-				strBuilder.Append(line);
-			}
-
-			Console.WriteLine(strBuilder.ToString());
-		}
-
-		static public void CountLogs()
-		{
-			StreamReader reader = new StreamReader("test.txt");
-			int count = 0;
-			while (reader.Peek() >= 0)
-			{
-				Console.WriteLine(reader.ReadLine());
-				count++;
-			}
-			reader.Close();
-
-			Console.WriteLine("Count of logs: " + count);
-		}
-
-		public static void OldestLog()
-		{
-			StreamReader reader = new StreamReader("test.txt");
-			string log = reader.ReadLine();
-			reader.Close();
-
-			Console.WriteLine("Oldest log: " + log);
-		}
-
-	}
+        static public void ShowLogFile()
+        {
+            if (File.Exists("test.txt") == true)
+            {
+                StreamReader outputFile = new StreamReader("test.txt");
+                string line = null;
+                do
+                {
+                    line = outputFile.ReadLine();
+                    Console.WriteLine(line);
+                } while (line != null);
+                outputFile.Close();
+            }
+        }
+    }
 }

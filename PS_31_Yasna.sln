@@ -7,7 +7,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserLogin", "UserLogin\User
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StudentInfoSystem", "StudentInfoSystem\StudentInfoSystem.csproj", "{FFCE143F-4066-401C-B91C-E70C28CE4D87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFhello", "WPFhello\WPFhello.csproj", "{FBF476F1-DC4E-455D-8199-17F26A180E02}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPFhello", "WPFhello\WPFhello.csproj", "{FBF476F1-DC4E-455D-8199-17F26A180E02}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExpenseIt", "ExpenseIt\ExpenseIt.csproj", "{8ED7A940-6C9D-49D4-8D1E-73964255FCAC}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EasyMVVM", "EasyMVVM\EasyMVVM.csproj", "{872A48AA-9EC4-4E01-98E4-C9162397344C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WpfExample", "WpfExample\WpfExample.csproj", "{CD355633-AE4E-407E-A6CF-48EAFFCFD617}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +33,18 @@ Global
 		{FBF476F1-DC4E-455D-8199-17F26A180E02}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBF476F1-DC4E-455D-8199-17F26A180E02}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBF476F1-DC4E-455D-8199-17F26A180E02}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8ED7A940-6C9D-49D4-8D1E-73964255FCAC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8ED7A940-6C9D-49D4-8D1E-73964255FCAC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8ED7A940-6C9D-49D4-8D1E-73964255FCAC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8ED7A940-6C9D-49D4-8D1E-73964255FCAC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{872A48AA-9EC4-4E01-98E4-C9162397344C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{872A48AA-9EC4-4E01-98E4-C9162397344C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{872A48AA-9EC4-4E01-98E4-C9162397344C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{872A48AA-9EC4-4E01-98E4-C9162397344C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD355633-AE4E-407E-A6CF-48EAFFCFD617}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD355633-AE4E-407E-A6CF-48EAFFCFD617}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD355633-AE4E-407E-A6CF-48EAFFCFD617}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD355633-AE4E-407E-A6CF-48EAFFCFD617}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

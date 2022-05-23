@@ -1,94 +1,60 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace UserLogin
 {
-    internal class LoginValidation
+    public class LoginValidation
     {
-		private string _name, _password, _email;
-		private static UserRoles _currentUserRole;
-		public static string name
-		{
-			get;
-		}
+        static public UserRoles currentUserRole
+        { get; private set; }
 
-		public delegate void ActionOnError(string error);
+        static public string currentUserName
+        { get; set; }
 
-		private ActionOnError _onError;
+        private string _userName;
 
-		public LoginValidation(string name, string password, ActionOnError error)
-		{
-			_name = name;
-			_password = password;
-			_onError = error;
-		}
+        private string _password;
 
-		public static UserRoles currentUserRole
-		{
-			get;
-			private set;
-		}
+        private string _errorMessage;
 
-		public static UserRoles getRole()
-		{
-			return _currentUserRole;
-		}
+        public delegate void ActionOnError(string errorMsg);
 
+        private ActionOnError _actionOnError;
 
-		public bool validateUserInput(ref User user)
-		{
-			string errorMessage;
+        public LoginValidation()
+        {
+        }
 
+        public LoginValidation(string UserName, string Password, ActionOnError actionOnError)
+        {
+            this._userName = UserName;
+            this._password = Password;
+            this._actionOnError = actionOnError;
+        }
 
-			if (_name.Equals(null) || _password.Equals(null))
-			{
-				user.Role = UserRoles.ANONYMOUS;
-				_onError("Null username or password");
-				return false;
-			}
-			else if (IsStringEmpty(_name) || IsStringEmpty(_name))
-			{
-				user.Role = UserRoles.ANONYMOUS;
-				_onError("Empty username or password");
-				return false;
-			}
-			else if (IsStringLessThan5(_name) || IsStringLessThan5(_name))
-			{
-				user.Role = UserRoles.ANONYMOUS;
-				_onError("Username or password");
-				return false;
-			}
+        public bool ValidateUserInput(ref User user)
+        {
+            if (_userName.Equals(String.Empty) ||
+                _password.Equals(String.Empty) ||
+                _userName.Length < 5 ||
+                _password.Length < 5)
+            {
+                _errorMessage = "Input data is not valid";
+                _actionOnError(_errorMessage);
+                return false;
+            }
 
-			user = UserData.IsUserPassCorrect(_name, _password);
+            user = UserData.IsUserPassCorrect(_userName, _password);
 
-			if (user == null)
-			{
-				errorMessage = "No user";
-				_onError(errorMessage);
-				return false;
-			}
-			_currentUserRole = user.Role;
-			Logger.LogActivity("Successed Login");
-			return true;
-		}
+            if (user == null)
+            {
+                currentUserRole = UserRoles.ANONYMOUS;
+                _errorMessage = "User isn't found";
+                _actionOnError(_errorMessage);
+                return false;
+            }
+            currentUserRole = (UserRoles)user.Role;
+            currentUserName = _userName;
 
-
-
-		private static bool IsStringEmpty(string word)
-		{
-			return word.Equals(String.Empty);
-		}
-
-		private static bool IsStringLessThan5(string word)
-		{
-			return word.Length < 5;
-		}
-
-		public LoginValidation()
-		{
-		}
-	}
+            return true;
+        }
+    }
 }

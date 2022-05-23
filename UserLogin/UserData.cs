@@ -1,157 +1,143 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UserLogin
 {
-    internal class UserData
+    static public class UserData
     {
-		private static List<User> _testUsers = new List<User>();
+        static public List<User> TestUsers
+        {
+            get
+            {
+                ResetTestUserData();
+                return _testUsers;
+            }
+            set { }
+        }
 
-		public static List<User> testUsers
-		{
-			get
-			{
-				resetUserData();
-				return _testUsers;
-			}
+        static public List<User> DatabaseUsers
+        {
+            get
+            {
+                ResetDatabaseUserData();
+                return _databaseUsers;
+            }
+        }
 
-			set { }
-		}
-		public static void resetUserData()
-		{
-			if (!_testUsers.Any())
-			{
-				_testUsers.Add(FillUser(UserRoles.ADMIN));
+        private static void ResetDatabaseUserData()
+        {
+            if (_databaseUsers == null)
+                _databaseUsers = new List<User>();
+        }
 
-				for (int i = 1; i < 2; i++)
-				{
-					_testUsers.Add(FillUser(UserRoles.STUDENT));
-				}
-			}
-		}
+        static private UserContext context = new UserContext();
 
-		public static User IsUserPassCorrect(string name, string pass)
-		{
-			User user = (from account in testUsers where account.Name.Equals(name, StringComparison.Ordinal) && account.Pass.Equals(pass, StringComparison.Ordinal) select account).FirstOrDefault();
+        static private List<User> _testUsers;
 
-			return user;
-		}
+        static private List<User> _databaseUsers;
 
-		public static User getUserByUsername(string name)
-		{
-			foreach (User user in testUsers)
-			{
-                if (name.Equals(user.Name, StringComparison.Ordinal))
-				{
-					return user;
-				}
-			}
-			return null;
-		}
+        static private void ResetTestUserData()
+        {
+            if (_testUsers == null)
+            {
+                _testUsers = new List<User>
+                {
+                    new User
+                    {
+                        Username = "vladimirov00",
+                        Password = "12345",
+                        FakNum = "123219010",
+                        Role = 1,
+                        Created = DateTime.Now,
+                        ExpireOn = DateTime.MaxValue
+                    },
+                    new User
+                    {
+                        Username = "milanov30",
+                        Password = "pass123",
+                        FakNum = "123219014",
+                        Role = 4,
+                        Created = DateTime.Now,
+                        ExpireOn = DateTime.MaxValue
+                    },
+                    
+                };
+            }
+        }
 
-		private static User FillUser(UserRoles role)
-		{
-			User user = new User();
-			Console.WriteLine("Hello, please enter you username: ");
-			user.Name = Console.ReadLine();
-			Console.WriteLine("Enter your password");
-			user.Pass = Console.ReadLine();
-			Console.WriteLine("Enter your faculty number:");
-			user.facNum = Console.ReadLine();
-			user.Role = role;
-			user.Created = DateTime.MaxValue;
-			return user;
-		}
+        static public void AddUsers()
+        {
+            foreach (User u in TestUsers)
+            {
+                context.Users.Add(u);
+            }
+            context.SaveChanges();
+        }
 
-		public static void SetUserActiveTo(string name, DateTime date)
-		{
-			foreach (User user in testUsers)
-			{
-				if (name.Equals(user.Name))
-				{
-					Logger.LogActivity("Change the activity of " + name);
-					user.Created = date;
-					break;
-				}
-			}
-		}
+        static public User IsUserPassCorrect(string UserName, string Password)
+        {
+            if (context.Users.Count() == 0)
+            {
+                AddUsers();
+            }
 
-		public static void seeAllUsers()
-		{
-			foreach (User user in _testUsers)
-			{
-				Console.WriteLine(user.Name);
-			}
-		}
 
-		public static void AssignUserRole(string name, UserRoles role)
-		{
-			foreach (User user in testUsers)
-			{
-				if (name.Equals(user.Name, StringComparison.Ordinal))
-				{
-					Logger.LogActivity("Changing the role of " + name);
-					user.Role = role;
-					break;
-				}
-			}
-		}
+            User user = (from u in context.Users
+                         where u.Username.Equals(UserName) && u.Password.Equals(Password)
+                         select u).DefaultIfEmpty(null).First() ?? throw new UserNotFoundException("User was not found");
 
-		public static void PrepareCertificate()
-		{
-			StringBuilder certificateBuffer = new StringBuilder();
-			certificateBuffer.AppendLine("This certificate is evidence for graduating the following course and year for the following student");
-			Console.WriteLine("Enter the username of the student");
-			User user = getUserByUsername(Console.ReadLine());
-			if (user == null)
-			{
-				Console.WriteLine("No such user");
-				return;
-			}
-			certificateBuffer.AppendLine("Name: " + user.Name);
-			certificateBuffer.AppendLine("Faculty number: " + user.facNum);
-			Console.WriteLine("Enter speciality for student");
-			certificateBuffer.AppendLine("Graduated specialty: " + Console.ReadLine());
-			Console.WriteLine("Enter course of the student");
-			certificateBuffer.AppendLine("Course: " + Console.ReadLine());
-			while (true)
-			{
-				Console.WriteLine("Enter file name with exstension: ");
-				string filename = Console.ReadLine();
-				if ((filename == null) || !filename.Contains(".txt"))
-				{
-					Console.WriteLine("Invalid file");
-				}
-				else
-				{
+            return user;
+        }
 
-					SaveCertificate(certificateBuffer.ToString(), filename);
-					break;
-				}
-			}
+        static public void SetUserActiveTo(string UserName, DateTime date)
+        {
+            foreach (User user in context.Users)
+            {
+                if (user.Username.Equals(UserName))
+                {
+                    user.ExpireOn = date;
+                    Logger.LogActivity("Expire date has been changed for " + UserName);
+                }
+            }
+            context.SaveChanges();
+        }
 
-		}
+        static public void AssignUserRole(string UserName, UserRoles userRole)
+        {
 
-		private static void SaveCertificate(string certificate, string filename)
-		{
-			if (File.Exists(filename))
-			{
-				Thread.Sleep(1000);
-				File.AppendAllText(filename, certificate);
-			}
-			else
-			{
-				FileStream file = File.Create(filename);
-				StreamWriter writer = new StreamWriter(file);
-				writer.WriteLine(certificate);
-				writer.Close();
-				file.Close();
-			}
-		}
+            User usr =
+            (from u in context.Users
+             where u.Username.Equals(UserName)
+             select u).First();
 
-	}
+            usr.Role = (int)userRole;
+            Logger.LogActivity("Role has been changed for " + UserName);
 
+            context.SaveChanges();
+        }
+
+        static public void DeleteUser(string UserName)
+        {
+            User delObj =
+            (from u in context.Users
+             where u.Username == UserName
+             select u).First();
+            context.Users.Remove(delObj);
+            context.SaveChanges();
+        }
+
+        static public void ShowUsers()
+        {
+            foreach (User user in context.Users)
+            {
+                Console.WriteLine("Username: " + user.Username);
+                Console.WriteLine("User password: " + user.Password);
+                Console.WriteLine("User faculty number: " + user.FakNum);
+                Console.WriteLine("User Role: " + (UserRoles)user.Role);
+                Console.WriteLine("Created on: " + user.Created);
+                Console.WriteLine("Expire on: " + user.ExpireOn);
+            }
+        }
+    }
 }

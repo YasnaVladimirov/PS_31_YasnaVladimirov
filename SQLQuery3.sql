@@ -1,0 +1,1 @@
+CREATE TABLE Students (	StudentId int not null identity primary key,	FirstName nvarchar(100),	SecondName nvarchar(100),	LastName nvarchar(100),	Faculty nvarchar(100),	Major nvarchar(100),	OKS nvarchar(100),	[Status] nvarchar(100),	FacNum nvarchar(100),	Course int,	[Stream] int,	[Group] int,	Photo image);

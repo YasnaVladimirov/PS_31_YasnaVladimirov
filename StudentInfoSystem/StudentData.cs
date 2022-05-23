@@ -7,35 +7,33 @@ using UserLogin;
 
 namespace StudentInfoSystem
 {
-    internal class StudentData
+    internal static class StudentData
     {
-        private List<Student> TestStudents;
+        private static List<Student> _testStudents;
 
-        public StudentData()
-        {
-            TestStudents = new List<Student>();
-            TestStudents.Add(exampleStudent());
+        public static List<Student> TestStudents { 
+            get 
+            {
+                ResetStudentsData();
+                return _testStudents;
+            } 
         }
 
-        public List<Student> GetStudents()
+        private static void ResetStudentsData()
         {
-            return TestStudents;
-        }
+            if (_testStudents == null)
+            {
+                _testStudents = new List<Student>();
 
-        private void SetStudents(List<Student> list)
-        {
-            TestStudents = list;
-        }
+                Student student = new Student();
+                student.FirstName = "Yasna";
+                student.SecondName = "Vladimirov";
+                student.FacNum = "123219010";
+                student.Course = 3;
+                student.Major = "KSI";
 
-        private Student exampleStudent()
-        {
-            Student student = new Student();
-            student.Name = "Yasna";
-            student.Family = "Vladimirov";
-            student.FacultyNumber = "123219010";
-            student.Year = 3;
-            student.Specialty = "KSI";
-            return student;
+                _testStudents.Add(student);
+            }
         }
     }
 }
